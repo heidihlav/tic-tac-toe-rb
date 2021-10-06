@@ -88,12 +88,20 @@ WIN_COMBINATIONS = [
 
   def winner(board)
     if array = won?(board)
-    board[array[0]]
+      board[array[0]]
     end
   end  
 
   def play(board)
-    until board[8] == "X" do
-      turn(board)
+    until over?(board)
+      turn(board)    
+        if won?(board)
+          puts "Congratulations!"
+        else draw?(board)
+          puts "Cat\'s Game!"
+        end
     end
   end
+
+  # board[8] == "X" do
+  #   turn(board)
