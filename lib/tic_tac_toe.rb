@@ -1,3 +1,5 @@
+require 'pry'
+
 WIN_COMBINATIONS = [
     [0,1,2],
     [3,4,5],
@@ -93,15 +95,14 @@ WIN_COMBINATIONS = [
   end  
 
   def play(board)
-    until over?(board)
-      turn(board)    
-        if won?(board)
-          puts "Congratulations!"
-        else draw?(board)
-          puts "Cat\'s Game!"
-        end
-    end
+    turn(board) until over?(board)  
+      if #{winner(board)} == "X" 
+        puts "Congratulations #{winner(board)}!"
+      else draw?(board)
+        puts "Cat's Game!"
+     end
   end
 
   # board[8] == "X" do
   #   turn(board)
+  # won?(board)
