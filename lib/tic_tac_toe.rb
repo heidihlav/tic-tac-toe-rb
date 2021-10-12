@@ -95,14 +95,28 @@ WIN_COMBINATIONS = [
   end  
 
   def play(board)
-    turn(board) until over?(board)  
-      if #{winner(board)} == "X" 
-        puts "Congratulations #{winner(board)}!"
-      else draw?(board)
-        puts "Cat's Game!"
-     end
+    while !over?(board)
+      turn(board)
+    end
+    if won?(board)
+      puts "Congratulations #{winner(board)}!"
+    elsif draw?(board)
+      puts "Cat's Game!"
+    end
   end
 
   # board[8] == "X" do
   #   turn(board)
   # won?(board)
+
+  # turn(board) 
+  #   until over?(board)
+  #     if winner(board) == "X"
+  #       puts "Congratulations #{winner(board)}!"
+  #     elsif winner(board) == "O"
+  #       puts "Congratulations #{winner(board)}!"
+  #     else draw?(board)
+  #       puts "Cat's Game!"
+  #     end 
+  #    end
+  # end
