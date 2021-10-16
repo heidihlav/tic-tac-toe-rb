@@ -18,34 +18,34 @@ WIN_COMBINATIONS = [
     puts "-----------"
     puts " #{board[6]} | #{board[7]} | #{board[8]} "
   end
-  
+
   def input_to_index(user_input)
     user_input.to_i - 1
   end
 
-  def move(board, index, current_player)
-    board[index] = current_player
+  def move(board, index, token)
+    board[index] = token
   end
 
-  def position_taken?(board, location)
-    board[location] != " " && board[location] != ""
+  def position_taken?(board, position)
+    board[position] != "" && board[position] != " "
   end
-
+  
   def valid_move?(board, index)
     index.between?(0,8) && !position_taken?(board, index)
   end
 
   def turn_count(board)
     counter = 0
-    board.each do |token|
-      if token == "X" || token == "O"
-        counter += 1
-      else 
-      end 
+    board.each do |turns|
+    if turns == "X" || turns == "O"
+      counter += 1
+    else
+      end
     end
-    counter  
+    counter
   end
-
+  
   def current_player(board)
     if turn_count(board).modulo(2).zero?
       return "X"
@@ -53,70 +53,57 @@ WIN_COMBINATIONS = [
       return "O"
     end
   end
-
+  
   def turn(board)
-    puts "Please enter 1-9:"
-    user_input = gets.chomp
-    index = input_to_index(user_input)
-    if valid_move?(board, index)
-        move(board, index, token = "X")
-    else 
-        turn(board)  
-    end  
+  puts "Please enter 1-9:"
+  user_input = gets.strip
+  index = input_to_index(user_input)
+  token = current_player(board)
+  if valid_move?(board, index)
+    move(board, index, token)
     display_board(board)
-  end 
-
-  def won?(board)
-    WIN_COMBINATIONS.find { 
-      |array| board[array[0]] == board[array[1]] && 
-      board[array[1]] == board[array[2]] &&
-      position_taken?(board, array[1])
-    }
+  else
+    turn(board)
   end
+end
 
-  def full?(board)
-    board.none? {|token|
-      token ==  " "
-    }
+def won?(board)
+  WIN_COMBINATIONS.detect do |win_cmbo|
+    board[win_cmbo[0]] == board[win_cmbo[1]] &&
+    board[win_cmbo[1]] == board[win_cmbo[2]] &&
+    position_taken?(board, win_cmbo[1])
   end
+end
 
-  def draw?(board)
-    full?(board) && !won?(board)
+def full?(board)
+  WIN_COMBINATIONS.all? do |win_cmbo|
+    board[win_cmbo[0]] == "X" || board[win_cmbo[0]] == "O"
+    position_taken?(board, win_cmbo[0])
   end
+end
 
-  def over?(board)
-    draw?(board) || won?(board)
+def draw?(board)
+  full?(board) && !won?(board)
+end
+
+def over?(board)
+  won?(board) || full?(board) || draw?(board)
+end
+
+
+def winner(board)
+  if array = won?(board)
+    board[array[0]]
   end
+end  
 
-  def winner(board)
-    if array = won?(board)
-      board[array[0]]
-    end
-  end  
-
-  def play(board)
-    while !over?(board)
-      turn(board)
-    end
-    if won?(board)
-      puts "Congratulations #{winner(board)}!"
-    elsif draw?(board)
-      puts "Cat's Game!"
-    end
+def play(board)
+  while !over?(board)
+    turn(board)
   end
-
-  # board[8] == "X" do
-  #   turn(board)
-  # won?(board)
-
-  # turn(board) 
-  #   until over?(board)
-  #     if winner(board) == "X"
-  #       puts "Congratulations #{winner(board)}!"
-  #     elsif winner(board) == "O"
-  #       puts "Congratulations #{winner(board)}!"
-  #     else draw?(board)
-  #       puts "Cat's Game!"
-  #     end 
-  #    end
-  # end
+  if won?(board)
+    puts "Congratulations #{winner(board)}!"
+  elsif draw?(board)
+    puts "Cat's Game!"
+  end
+end
